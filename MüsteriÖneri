@@ -1,0 +1,24 @@
+go
+Create procedure MusteriOneri
+(@Mus int
+)
+as 
+declare @kat int
+--Müsteri en çok hangi kategoriden sipariş vermiş
+Select @kat=t.KategoriID from 
+(Select k.KategoriID,Sum(sd.Adet) Toplam_Adet,ROW_NUMBER() over (order by Sum(sd.Adet) desc) RN from Siparis s 
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Musteri m on m.MusteriID=s.MusteriID
+join Urun u on u.UrunID=sd.ÜrünID
+join Kategori k on u.KategoriID=k.KategoriID
+where m.MusteriID=100
+group by k.KategoriID) as t 
+--O kategoride en çok siparis verilen 5 ürünü müsteriye öneririm.
+Select t.UrunID from 
+(Select u.UrunID,Sum(sd.Adet) Toplam_Adet,ROW_NUMBER() over (order by Sum(sd.Adet) desc) RN from Siparis s 
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Musteri m on m.MusteriID=s.MusteriID
+join Urun u on u.UrunID=sd.ÜrünID
+join Kategori k on u.KategoriID=k.KategoriID
+where k.KategoriID=@kat
+group by UrunID) as t where t.RN<=5
