@@ -1,0 +1,501 @@
+USE [master]
+GO
+/****** Object:  Database [DB]    Script Date: 8/1/2017 4:47:16 PM ******/
+CREATE DATABASE [DB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'DB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\DB.mdf' , SIZE = 119808KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'DB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.MSSQLSERVER\MSSQL\DATA\DB_log.ldf' , SIZE = 353216KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [DB] SET COMPATIBILITY_LEVEL = 120
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [DB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [DB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [DB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [DB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [DB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [DB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [DB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [DB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [DB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [DB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [DB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [DB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [DB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [DB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [DB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [DB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [DB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [DB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [DB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [DB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [DB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [DB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [DB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [DB] SET RECOVERY FULL 
+GO
+ALTER DATABASE [DB] SET  MULTI_USER 
+GO
+ALTER DATABASE [DB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [DB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [DB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [DB] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+ALTER DATABASE [DB] SET DELAYED_DURABILITY = DISABLED 
+GO
+USE [DB]
+GO
+/****** Object:  Table [dbo].[Kampanya]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Kampanya](
+	[KampanyaID] [int] NOT NULL,
+	[Kampanya_Aciklaması] [nvarchar](255) NULL,
+	[Kampanya_Balangıç_Tarihi] [smalldatetime] NULL,
+	[Bitiş_Tarihi] [smalldatetime] NULL,
+ CONSTRAINT [PK_Kampanya] PRIMARY KEY CLUSTERED 
+(
+	[KampanyaID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[KargoFirmasi]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[KargoFirmasi](
+	[KargoFirmaID] [tinyint] NOT NULL,
+	[Firma] [nvarchar](255) NULL,
+	[Telefon] [char](10) NULL,
+	[mail] [nvarchar](255) NULL,
+ CONSTRAINT [PK_KargoFirmasi] PRIMARY KEY CLUSTERED 
+(
+	[KargoFirmaID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Kategori]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Kategori](
+	[KategoriID] [smallint] NOT NULL,
+	[Kategori] [nvarchar](150) NULL,
+	[KategoriResim] [image] NULL,
+	[Aciklama] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Kategori] PRIMARY KEY CLUSTERED 
+(
+	[KategoriID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Musteri]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Musteri](
+	[MusteriID] [int] NOT NULL,
+	[Yetkili_Kişi_Ad] [nvarchar](255) NULL,
+	[Yetkili_Kişi_Soyad] [nvarchar](255) NULL,
+	[Telefon] [char](10) NULL,
+	[Mail] [nvarchar](255) NULL,
+	[Password] [nvarchar](255) NULL,
+	[Adres] [nvarchar](max) NULL,
+	[SehirID] [smallint] NULL,
+	[Firma] [nvarchar](150) NULL,
+ CONSTRAINT [PK_Musteri] PRIMARY KEY CLUSTERED 
+(
+	[MusteriID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Resim]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Resim](
+	[ResimID] [int] NOT NULL,
+	[Resim] [image] NOT NULL,
+ CONSTRAINT [PK_Resim] PRIMARY KEY CLUSTERED 
+(
+	[ResimID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[ResimUrun]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ResimUrun](
+	[ResimID] [int] NOT NULL,
+	[ÜrünID] [smallint] NOT NULL,
+ CONSTRAINT [PK_ResimUrun] PRIMARY KEY CLUSTERED 
+(
+	[ResimID] ASC,
+	[ÜrünID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[SatısSonrasi]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SatısSonrasi](
+	[SatısSonrasıDestekID] [int] NOT NULL,
+	[SiparisID] [int] NULL,
+	[Tutar] [int] NULL,
+	[Tarih] [smalldatetime] NULL,
+	[Urun] [smallint] NULL,
+ CONSTRAINT [PK_SatısSonrasi] PRIMARY KEY CLUSTERED 
+(
+	[SatısSonrasıDestekID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Sehir]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Sehir](
+	[SehirID] [smallint] NOT NULL,
+	[Sehir] [nvarchar](255) NULL,
+	[ÜlkeID] [tinyint] NULL,
+ CONSTRAINT [PK_Sehir] PRIMARY KEY CLUSTERED 
+(
+	[SehirID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Siparis]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Siparis](
+	[SiparisID] [int] NOT NULL,
+	[MusteriID] [int] NULL,
+	[Siparis_Tarihi] [smalldatetime] NULL,
+	[Teslim_Edilmesi_Gereken_Tarih] [smalldatetime] NULL,
+	[Teslim_Tarihi] [smalldatetime] NULL,
+	[Kredi_Kartı_No] [char](16) NULL,
+	[KargoFirması] [tinyint] NULL,
+	[Adres] [nvarchar](255) NULL,
+	[SehirID] [smallint] NULL,
+	[Kampanya] [int] NULL,
+	[Kargo_Tutari] [money] NULL,
+	[KurulumYapıldıMı] [bit] NULL,
+ CONSTRAINT [PK_Siparis] PRIMARY KEY CLUSTERED 
+(
+	[SiparisID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SiparisDetay]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SiparisDetay](
+	[SiparişID] [int] NOT NULL,
+	[ÜrünID] [smallint] NOT NULL,
+	[Adet] [smallint] NULL,
+	[Fiyat] [money] NULL,
+	[İndirim] [decimal](4, 2) NULL,
+	[KurulumYapıldıMı] [bit] NULL,
+ CONSTRAINT [PK_SiparisDetay] PRIMARY KEY CLUSTERED 
+(
+	[SiparişID] ASC,
+	[ÜrünID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Ulke]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Ulke](
+	[UlkeID] [tinyint] NOT NULL,
+	[Ulke] [nvarchar](255) NULL,
+ CONSTRAINT [PK_Ulke] PRIMARY KEY CLUSTERED 
+(
+	[UlkeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Urun]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Urun](
+	[UrunID] [smallint] NOT NULL,
+	[UrunAdı] [nvarchar](255) NULL,
+	[Stok] [smallint] NULL,
+	[Uretimi_Durduruldu] [bit] NULL,
+	[KategoriID] [smallint] NULL,
+ CONSTRAINT [PK_Urun] PRIMARY KEY CLUSTERED 
+(
+	[UrunID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  View [dbo].[UrunYılAdet]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create view [dbo].[UrunYılAdet]
+as
+Select top 99.9 percent  u.UrunAdı,year(s.Siparis_Tarihi) as Yıl,Sum(sd.Adet)Toplam_Adet from Urun u
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Musteri mmm on mmm.MusteriID=s.MusteriID
+where mmm.SehirID in 
+(Select mm.SehirID from Musteri mm where mm.MusteriID in 
+(Select t.MusteriID from
+(Select m.MusteriID,SUM(sd.Adet) Toplam_Adet,DENSE_RANK()over( order by SUM(sd.Adet) desc) rw  from Musteri m
+join Siparis s on s.MusteriID=m.MusteriID
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Urun u on u.UrunID=sd.ÜrünID
+group by m.MusteriID)as t where t.rw=1))
+group by u.UrunAdı,year(s.Siparis_Tarihi) order by 1
+
+GO
+/****** Object:  View [dbo].[vw_KategoriSehirUcret]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create view [dbo].[vw_KategoriSehirUcret]
+as
+Select top 99.9 percent k.Kategori,se.Sehir,Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim)) Toplam_Ücret from Kategori k
+join Urun u on u.KategoriID=k.KategoriID
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Sehir se on se.SehirID=s.SehirID
+where u.UrunID in(
+Select t.UrunID from 
+(Select u.UrunID,sum(sd.Adet) Toplam_Adet from  Kategori k
+join Urun u on u.KategoriID=k.KategoriID
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Sehir se on se.SehirID=s.SehirID
+group by u.UrunID
+Having Sum(sd.Adet)>5600) as t ) --Benim veritabanımda 100 çok az olduğu için filtreyi genilettim ve 5600 yaptım
+group by Kategori,Sehir order by Kategori 
+GO
+/****** Object:  View [dbo].[vw_satısSonrasi]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+Create view [dbo].[vw_satısSonrasi]
+as
+Select u.UrunAdı,se.Sehir,Count(ss.SatısSonrasıDestekID) 'Satı Sonrası Destek Sayisi' from urun u
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join SatısSonrasi ss on ss.SiparisID=s.SiparisID
+join Sehir se on se.SehirID=s.SehirID
+group by UrunAdı,Sehir
+GO
+/****** Object:  View [dbo].[vw_top50]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create view [dbo].[vw_top50]
+as
+Select top 50 u.UrunAdı,Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim)) as Toplam_Ücret from SiparisDetay sd 
+join Urun u on sd.ÜrünID=u.UrunID
+group by UrunAdı
+having Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim))>(Select AVG(sd.Adet*sd.Fiyat*(1-sd.İndirim)) from SiparisDetay sd )
+order by Toplam_Ücret desc
+
+GO
+/****** Object:  View [dbo].[vw_YılOrtalamaFiyat]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+Create View [dbo].[vw_YılOrtalamaFiyat]
+as
+Select year(s.Siparis_Tarihi) Yıl,AVG(sd.Adet*sd.Fiyat*(1-sd.İndirim)) Ortalama_Fiyat from Siparis s
+join SiparisDetay sd on s.SiparisID=sd.SiparişID
+where sd.ÜrünID in (Select sd2.ÜrünID from SiparisDetay sd2 where sd2.KurulumYapıldıMı=0)
+group by year(s.Siparis_Tarihi)
+GO
+ALTER TABLE [dbo].[Musteri]  WITH CHECK ADD  CONSTRAINT [FK_Musteri_Sehir] FOREIGN KEY([SehirID])
+REFERENCES [dbo].[Sehir] ([SehirID])
+GO
+ALTER TABLE [dbo].[Musteri] CHECK CONSTRAINT [FK_Musteri_Sehir]
+GO
+ALTER TABLE [dbo].[ResimUrun]  WITH CHECK ADD  CONSTRAINT [FK_ResimUrun_Resim] FOREIGN KEY([ResimID])
+REFERENCES [dbo].[Resim] ([ResimID])
+GO
+ALTER TABLE [dbo].[ResimUrun] CHECK CONSTRAINT [FK_ResimUrun_Resim]
+GO
+ALTER TABLE [dbo].[ResimUrun]  WITH CHECK ADD  CONSTRAINT [FK_ResimUrun_Urun] FOREIGN KEY([ÜrünID])
+REFERENCES [dbo].[Urun] ([UrunID])
+GO
+ALTER TABLE [dbo].[ResimUrun] CHECK CONSTRAINT [FK_ResimUrun_Urun]
+GO
+ALTER TABLE [dbo].[SatısSonrasi]  WITH CHECK ADD  CONSTRAINT [FK_SatısSonrasi_Siparis] FOREIGN KEY([SiparisID])
+REFERENCES [dbo].[Siparis] ([SiparisID])
+GO
+ALTER TABLE [dbo].[SatısSonrasi] CHECK CONSTRAINT [FK_SatısSonrasi_Siparis]
+GO
+ALTER TABLE [dbo].[SatısSonrasi]  WITH CHECK ADD  CONSTRAINT [FK_SatısSonrasi_Urun] FOREIGN KEY([Urun])
+REFERENCES [dbo].[Urun] ([UrunID])
+GO
+ALTER TABLE [dbo].[SatısSonrasi] CHECK CONSTRAINT [FK_SatısSonrasi_Urun]
+GO
+ALTER TABLE [dbo].[Sehir]  WITH CHECK ADD  CONSTRAINT [FK_Sehir_Ulke] FOREIGN KEY([ÜlkeID])
+REFERENCES [dbo].[Ulke] ([UlkeID])
+GO
+ALTER TABLE [dbo].[Sehir] CHECK CONSTRAINT [FK_Sehir_Ulke]
+GO
+ALTER TABLE [dbo].[Siparis]  WITH CHECK ADD  CONSTRAINT [FK_Siparis_Kampanya] FOREIGN KEY([Kampanya])
+REFERENCES [dbo].[Kampanya] ([KampanyaID])
+GO
+ALTER TABLE [dbo].[Siparis] CHECK CONSTRAINT [FK_Siparis_Kampanya]
+GO
+ALTER TABLE [dbo].[Siparis]  WITH CHECK ADD  CONSTRAINT [FK_Siparis_KargoFirmasi] FOREIGN KEY([KargoFirması])
+REFERENCES [dbo].[KargoFirmasi] ([KargoFirmaID])
+GO
+ALTER TABLE [dbo].[Siparis] CHECK CONSTRAINT [FK_Siparis_KargoFirmasi]
+GO
+ALTER TABLE [dbo].[Siparis]  WITH CHECK ADD  CONSTRAINT [FK_Siparis_Musteri] FOREIGN KEY([MusteriID])
+REFERENCES [dbo].[Musteri] ([MusteriID])
+GO
+ALTER TABLE [dbo].[Siparis] CHECK CONSTRAINT [FK_Siparis_Musteri]
+GO
+ALTER TABLE [dbo].[Siparis]  WITH CHECK ADD  CONSTRAINT [FK_Siparis_Sehir] FOREIGN KEY([SehirID])
+REFERENCES [dbo].[Sehir] ([SehirID])
+GO
+ALTER TABLE [dbo].[Siparis] CHECK CONSTRAINT [FK_Siparis_Sehir]
+GO
+ALTER TABLE [dbo].[SiparisDetay]  WITH CHECK ADD  CONSTRAINT [FK_SiparisDetay_Siparis] FOREIGN KEY([SiparişID])
+REFERENCES [dbo].[Siparis] ([SiparisID])
+GO
+ALTER TABLE [dbo].[SiparisDetay] CHECK CONSTRAINT [FK_SiparisDetay_Siparis]
+GO
+ALTER TABLE [dbo].[SiparisDetay]  WITH CHECK ADD  CONSTRAINT [FK_SiparisDetay_Urun] FOREIGN KEY([ÜrünID])
+REFERENCES [dbo].[Urun] ([UrunID])
+GO
+ALTER TABLE [dbo].[SiparisDetay] CHECK CONSTRAINT [FK_SiparisDetay_Urun]
+GO
+ALTER TABLE [dbo].[Urun]  WITH CHECK ADD  CONSTRAINT [FK_Urun_Kategori] FOREIGN KEY([KategoriID])
+REFERENCES [dbo].[Kategori] ([KategoriID])
+GO
+ALTER TABLE [dbo].[Urun] CHECK CONSTRAINT [FK_Urun_Kategori]
+GO
+ALTER TABLE [dbo].[Urun]  WITH CHECK ADD  CONSTRAINT [FK_Urun_Kategori1] FOREIGN KEY([KategoriID])
+REFERENCES [dbo].[Kategori] ([KategoriID])
+GO
+ALTER TABLE [dbo].[Urun] CHECK CONSTRAINT [FK_Urun_Kategori1]
+GO
+/****** Object:  StoredProcedure [dbo].[MusteriOneri]    Script Date: 8/1/2017 4:47:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create procedure [dbo].[MusteriOneri]
+(@Mus int
+)
+as 
+declare @kat int
+--Müsteri en çok hangi kategoriden sipariş vermiş
+Select @kat=t.KategoriID from 
+(Select k.KategoriID,Sum(sd.Adet) Toplam_Adet,ROW_NUMBER() over (order by Sum(sd.Adet) desc) RN from Siparis s 
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Musteri m on m.MusteriID=s.MusteriID
+join Urun u on u.UrunID=sd.ÜrünID
+join Kategori k on u.KategoriID=k.KategoriID
+where m.MusteriID=100
+group by k.KategoriID) as t 
+--O kategoride en çok siparis verilen 5 ürünü müsteriye öneririm.
+Select t.UrunID from 
+(Select u.UrunID,Sum(sd.Adet) Toplam_Adet,ROW_NUMBER() over (order by Sum(sd.Adet) desc) RN from Siparis s 
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Musteri m on m.MusteriID=s.MusteriID
+join Urun u on u.UrunID=sd.ÜrünID
+join Kategori k on u.KategoriID=k.KategoriID
+where k.KategoriID=@kat
+group by UrunID) as t where t.RN<=5
+
+
+
+
+
+
+GO
+USE [master]
+GO
+ALTER DATABASE [DB] SET  READ_WRITE 
+GO
