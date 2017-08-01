@@ -1,0 +1,77 @@
+--a
+go
+create view vw_top50
+as
+Select top 50 u.UrunAdı,Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim)) as Toplam_Ücret from SiparisDetay sd 
+join Urun u on sd.ÜrünID=u.UrunID
+group by UrunAdı
+having Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim))>(Select AVG(sd.Adet*sd.Fiyat*(1-sd.İndirim)) from SiparisDetay sd )
+order by Toplam_Ücret desc
+
+--b
+go
+create view UrunYılAdet
+as
+Select top 99.9 percent  u.UrunAdı,year(s.Siparis_Tarihi) as Yıl,Sum(sd.Adet)Toplam_Adet from Urun u
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Musteri mmm on mmm.MusteriID=s.MusteriID
+where mmm.SehirID in 
+(Select mm.SehirID from Musteri mm where mm.MusteriID in 
+(Select t.MusteriID from
+(Select m.MusteriID,SUM(sd.Adet) Toplam_Adet,DENSE_RANK()over( order by SUM(sd.Adet) desc) rw  from Musteri m
+join Siparis s on s.MusteriID=m.MusteriID
+join SiparisDetay sd on sd.SiparişID=s.SiparisID
+join Urun u on u.UrunID=sd.ÜrünID
+group by m.MusteriID)as t where t.rw=1))
+group by u.UrunAdı,year(s.Siparis_Tarihi) order by 1
+
+Select * from UrunYılAdet
+
+
+--C
+go
+create view vw_KategoriSehirUcret
+as
+Select top 99.9 percent k.Kategori,se.Sehir,Sum(sd.Adet*sd.Fiyat*(1-sd.İndirim)) Toplam_Ücret from Kategori k
+join Urun u on u.KategoriID=k.KategoriID
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Sehir se on se.SehirID=s.SehirID
+where u.UrunID in(
+Select t.UrunID from 
+(Select u.UrunID,sum(sd.Adet) Toplam_Adet from  Kategori k
+join Urun u on u.KategoriID=k.KategoriID
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join Sehir se on se.SehirID=s.SehirID
+group by u.UrunID
+Having Sum(sd.Adet)>5600) as t ) --Benim veritabanımda 100 çok az olduğu için filtreyi genilettim ve 5600 yaptım
+group by Kategori,Sehir order by Kategori 
+
+Select * from vw_KategoriSehirUcret
+
+
+--d Ben ülke yerine Sehir yaptım benim veritabımda sadece Türkiye var
+go
+Create view vw_satısSonrasi
+as
+Select u.UrunAdı,se.Sehir,Count(ss.SatısSonrasıDestekID) 'Satı Sonrası Destek Sayisi' from urun u
+join SiparisDetay sd on sd.ÜrünID=u.UrunID
+join Siparis s on s.SiparisID=sd.SiparişID
+join SatısSonrasi ss on ss.SiparisID=s.SiparisID
+join Sehir se on se.SehirID=s.SehirID
+group by UrunAdı,Sehir
+
+Select * from vw_satısSonrasi
+
+
+--e 
+Create View vw_YılOrtalamaFiyat
+as
+Select year(s.Siparis_Tarihi) Yıl,AVG(sd.Adet*sd.Fiyat*(1-sd.İndirim)) Ortalama_Fiyat from Siparis s
+join SiparisDetay sd on s.SiparisID=sd.SiparişID
+where sd.ÜrünID in (Select sd2.ÜrünID from SiparisDetay sd2 where sd2.KurulumYapıldıMı=0)
+group by year(s.Siparis_Tarihi)
+
+Select * from vw_YılOrtalamaFiyat
